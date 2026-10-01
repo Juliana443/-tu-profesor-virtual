@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tu Profesor Virtual</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --fondo:#f4f6ff;
+    --tarjeta:#ffffff;
+    --texto:#20243a;
+    --secundario:#68708a;
+    --principal:#6657e8;
+    --principal2:#8b5cf6;
+    --borde:#e2e5f0;
+    --suave:#eeeeff;
+    --usuario:#6657e8;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--fondo);
+    color:var(--texto);
+    transition:.3s;
+}
+
+body.oscuro{
+    --fondo:#10121c;
+    --tarjeta:#1b1e2b;
+    --texto:#f5f6ff;
+    --secundario:#aeb3c7;
+    --borde:#303447;
+    --suave:#292d42;
+}
+
+button,
+select,
+input,
+textarea{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+
+/* HEADER */
+
+header{
+    background:var(--tarjeta);
+    border-bottom:1px solid var(--borde);
+    padding:15px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-icon{
+    width:48px;
+    height:48px;
+    border-radius:15px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:25px;
+    background:linear-gradient(135deg,var(--principal),var(--principal2));
+}
+
+.logo h1{
+    font-size:20px;
+}
+
+.logo p{
+    font-size:12px;
+    color:var(--secundario);
+    margin-top:3px;
+}
+
+.modo{
+    width:44px;
+    height:44px;
+    border-radius:13px;
+    border:1px solid var(--borde);
+    background:var(--fondo);
+    font-size:19px;
+}
+
+
+/* CONTENEDOR */
+
+.contenedor{
+    width:min(1050px,92%);
+    margin:auto;
+}
+
+
+/* HERO */
+
+.hero{
+    margin-top:35px;
+    padding:42px;
+    border-radius:28px;
+    color:white;
+    background:linear-gradient(135deg,#6257e8,#8b5cf6);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    overflow:hidden;
+    box-shadow:0 15px 40px rgba(60,50,150,.18);
+}
+
+.etiqueta{
+    display:inline-block;
+    background:rgba(255,255,255,.18);
+    padding:8px 13px;
+    border-radius:50px;
+    font-size:13px;
+    margin-bottom:15px;
+}
+
+.hero h2{
+    font-size:clamp(30px,5vw,48px);
+    line-height:1.08;
+    max-width:700px;
+}
+
+.hero h2 span{
+    color:#ffe66d;
+}
+
+.hero p{
+    margin-top:16px;
+    max-width:650px;
+    line-height:1.6;
+    opacity:.92;
+}
+
+.profesor{
+    font-size:100px;
+    animation:flotar 3s infinite ease-in-out;
+}
+
+@keyframes flotar{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-10px)}
+}
+
+
+/* CONFIGURACION */
+
+.panel{
+    background:var(--tarjeta);
+    margin-top:25px;
+    padding:30px;
+    border-radius:24px;
+    border:1px solid var(--borde);
+    box-shadow:0 10px 30px rgba(30,30,80,.07);
+}
+
+.panel h2{
+    font-size:24px;
+}
+
+.subtitulo{
+    color:var(--secundario);
+    margin-top:5px;
+    margin-bottom:22px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.campo{
+    margin-bottom:18px;
+}
+
+.campo label{
+    display:block;
+    font-weight:bold;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+select,
+input,
+textarea{
+    width:100%;
+    border:1px solid var(--borde);
+    background:var(--fondo);
+    color:var(--texto);
+    border-radius:12px;
+    padding:14px;
+    outline:none;
+    font-size:15px;
+}
+
+select:focus,
+input:focus,
+textarea:focus{
+    border-color:var(--principal);
+}
+
+
+/* MODOS */
+
+.modos{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-top:10px;
+}
+
+.modo-aprendizaje{
+    border:1px solid var(--borde);
+    background:var(--fondo);
+    color:var(--texto);
+    border-radius:15px;
+    padding:15px 8px;
+    text-align:center;
+}
+
+.modo-aprendizaje strong{
+    display:block;
+    margin-top:6px;
+}
+
+.modo-aprendizaje small{
+    color:var(--secundario);
+}
+
+.modo-aprendizaje.activo{
+    border-color:var(--principal);
+    background:var(--suave);
+}
+
+
+.boton-principal{
+    width:100%;
+    border:0;
+    color:white;
+    padding:16px;
+    margin-top:20px;
+    border-radius:13px;
+    font-size:16px;
+    font-weight:bold;
+    background:linear-gradient(135deg,var(--principal),var(--principal2));
+}
+
+
+/* AREA DEL PROFESOR */
+
+.clase{
+    margin-top:25px;
+    background:var(--tarjeta);
+    border-radius:24px;
+    border:1px solid var(--borde);
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(30,30,80,.07);
+}
+
+.clase-header{
+    padding:20px;
+    border-bottom:1px solid var(--borde);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.clase-header p{
+    color:var(--secundario);
+    font-size:13px;
+    margin-top:4px;
+}
+
+.nueva{
+    border:1px solid var(--borde);
+    background:var(--fondo);
+    color:var(--texto);
+    padding:9px 12px;
+    border-radius:9px;
+}
+
+
+/* MENSAJES */
+
+.mensajes{
+    padding:22px;
+    max-height:700px;
+    overflow-y:auto;
+}
+
+.mensaje{
+    display:flex;
+    margin-bottom:18px;
+}
+
+.mensaje.usuario{
+    justify-content:flex-end;
+}
+
+.burbuja{
+    max-width:80%;
+    padding:15px 17px;
+    border-radius:17px;
+    line-height:1.6;
+    white-space:pre-wrap;
+}
+
+.mensaje.profesor .burbuja{
+    background:var(--suave);
+    border-bottom-left-radius:4px;
+}
+
+.mensaje.usuario .burbuja{
+    background:var(--usuario);
+    color:white;
+    border-bottom-right-radius:4px;
+}
+
+
+/* IMAGEN */
+
+.imagen-tema{
+    margin-top:15px;
+}
+
+.imagen-tema img{
+    width:100%;
+    max-height:350px;
+    object-fit:cover;
+    border-radius:15px;
+    display:block;
+}
+
+.imagen-tema p{
+    font-size:11px;
+    color:var(--secundario);
+    margin-top:5px;
+}
+
+
+/* ACCIONES */
+
+.acciones{
+    display:flex;
+    gap:8px;
+    padding:0 20px 15px;
+    overflow-x:auto;
+}
+
+.acciones button{
+    white-space:nowrap;
+    border:1px solid var(--borde);
+    background:var(--fondo);
+    color:var(--texto);
+    border-radius:50px;
+    padding:9px 13px;
+}
+
+
+/* CHAT */
+
+.chat{
+    border-top:1px solid var(--borde);
+    padding:15px;
+    display:flex;
+    gap:10px;
+}
+
+.chat textarea{
+    resize:none;
+}
+
+.enviar{
+    width:55px;
+    border:0;
+    border-radius:12px;
+    background:var(--principal);
+    color:white;
+    font-size:20px;
+}
+
+
+/* PASOS */
+
+.pasos{
+    margin:45px 0;
+}
+
+.pasos h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.lista-pasos{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.paso{
+    background:var(--tarjeta);
+    border:1px solid var(--borde);
+    border-radius:18px;
+    padding:20px;
+}
+
+.numero{
+    width:36px;
+    height:36px;
+    background:var(--principal);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.paso p{
+    color:var(--secundario);
+    line-height:1.5;
+    font-size:14px;
+}
+
+
+/* FOOTER */
+
+footer{
+    background:var(--tarjeta);
+    border-top:1px solid var(--borde);
+    text-align:center;
+    padding:35px 20px;
+    color:var(--secundario);
+}
+
+footer strong{
+    color:var(--texto);
+}
+
+
+/* OCULTO */
+
+.oculto{
+    display:none;
+}
+
+
+/* MOVIL */
+
+@media(max-width:750px){
+
+    .hero{
+        padding:30px 23px;
+    }
+
+    .profesor{
+        display:none;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .modos{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .lista-pasos{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .panel{
+        padding:22px 18px;
+    }
+
+    .burbuja{
+        max-width:90%;
+    }
+}
+
+@media(max-width:480px){
+
+    .modos{
+        grid-template-columns:1fr;
+    }
+
+    .lista-pasos{
+        grid-template-columns:1fr;
+    }
+
+    .hero h2{
+        font-size:30px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            🎓
+        </div>
+
+        <div>
+            <h1>Tu Profesor Virtual</h1>
+            <p>Aprende, comprende y mejora</p>
+        </div>
+
+    </div>
+
+    <button class="modo" id="tema">
+        🌙
+    </button>
+
+</header>
+
+
+<main class="contenedor">
+
+
+<section class="hero">
+
+    <div>
+
+        <span class="etiqueta">
+            🤖 Aprendizaje inteligente
+        </span>
+
+        <h2>
+            Tu Profesor Virtual:
+            <span>aprende sin copiar</span>
+        </h2>
+
+        <p>
+            Comprende tus temas escolares, practica,
+            recibe pistas y descubre cómo resolver
+            los ejercicios por ti mismo.
+        </p>
+
+    </div>
+
+    <div class="profesor">
+        👩‍🏫
+    </div>
+
+</section>
+
+
+
+<section class="panel">
+
+    <h2>📚 Comencemos a aprender</h2>
+
+    <p class="subtitulo">
+        Dime qué quieres comprender y adaptaré
+        la actividad a tu nivel.
+    </p>
+
+
+    <div class="grid">
+
+        <div class="campo">
+
+            <label>
+                📖 Materia
+            </label>
+
+            <select id="materia">
+
+                <option>Matemáticas</option>
+                <option>Física</option>
+                <option>Química</option>
+                <option>Biología</option>
+                <option>Lengua Castellana</option>
+                <option>Inglés</option>
+                <option>Ciencias Sociales</option>
+                <option>Tecnología</option>
+                <option>Otra</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                🎓 Nivel
+            </label>
+
+            <select id="nivel">
+
+                <option>Primaria</option>
+                <option>6°</option>
+                <option>7°</option>
+                <option>8°</option>
+                <option>9°</option>
+                <option selected>10°</option>
+                <option>11°</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <div class="campo">
+
+        <label>
+            🧠 ¿Qué tema quieres aprender?
+        </label>
+
+        <input
+            id="tema"
+            type="text"
+            placeholder="Ejemplo: Leyes de Newton"
+        >
+
+    </div>
+
+
+    <label style="font-weight:bold;font-size:14px;">
+        🎯 ¿Cómo quieres aprender?
+    </label>
+
+
+    <div class="modos">
+
+        <button
+            class="modo-aprendizaje activo"
+            data-modo="explicar">
+
+            📖
+
+            <strong>Explícame</strong>
+
+            <small>
+                Entender el tema
+            </small>
+
+        </button>
+
+
+        <button
+            class="modo-aprendizaje"
+            data-modo="pista">
+
+            💡
+
+            <strong>Dame una pista</strong>
+
+            <small>
+                Sin darte la respuesta
+            </small>
+
+        </button>
+
+
+        <button
+            class="modo-aprendizaje"
+            data-modo="practicar">
+
+            ✏️
+
+            <strong>Practiquemos</strong>
+
+            <small>
+                Aprende haciendo
+            </small>
+
+        </button>
+
+
+        <button
+            class="modo-aprendizaje"
+            data-modo="comprobar">
+
+            🧠
+
+            <strong>Comprueba</strong>
+
+            <small>
+                ¿Entendí?
+            </small>
+
+        </button>
+
+    </div>
+
+
+    <button
+        class="boton-principal"
+        id="comenzar">
+
+        🚀 Comenzar aprendizaje
+
+    </button>
+
+</section>
+
+
+
+<section
+    class="clase oculto"
+    id="clase">
+
+
+    <div class="clase-header">
+
+        <div>
+
+            <h3>
+                👩‍🏫 Tu Profesor Virtual
+            </h3>
+
+            <p id="informacion">
+                Preparando la clase...
+            </p>
+
+        </div>
+
+
+        <button
+            class="nueva"
+            id="nueva">
+
+            Nueva clase
+
+        </button>
+
+    </div>
+
+
+
+    <div
+        class="mensajes"
+        id="mensajes">
+    </div>
+
+
+
+    <div class="acciones">
+
+        <button data-accion="sencillo">
+            🧩 Más sencillo
+        </button>
+
+        <button data-accion="ejemplo">
+            🌎 Dame un ejemplo
+        </button>
+
+        <button data-accion="pregunta">
+            🧠 Pregúntame
+        </button>
+
+        <button data-accion="imagen">
+            🖼️ Buscar imagen
+        </button>
+
+    </div>
+
+
+
+    <form class="chat" id="formulario">
+
+        <textarea
+            id="pregunta"
+            rows="1"
+            placeholder="Escribe aquí lo que no entiendes..."
+        ></textarea>
+
+        <button
+            class="enviar"
+            type="submit">
+
+            ➤
+
+        </button>
+
+    </form>
+
+
+</section>
+
+
+
+<section class="pasos">
+
+    <h2>
+        💜 ¿Cómo te ayuda?
+    </h2>
+
+
+    <div class="lista-pasos">
+
+
+        <div class="paso">
+
+            <div class="numero">1</div>
+
+            <h3>Pregunta</h3>
+
+            <p>
+                Escribe el tema o concepto
+                que quieres comprender.
+            </p>
+
+        </div>
+
+
+        <div class="paso">
+
+            <div class="numero">2</div>
+
+            <h3>Comprende</h3>
+
+            <p>
+                Recibe una explicación
+                adaptada a tu nivel.
+            </p>
+
+        </div>
+
+
+        <div class="paso">
+
+            <div class="numero">3</div>
+
+            <h3>Practica</h3>
+
+            <p>
+                Intenta resolver actividades
+                con ayuda y pistas.
+            </p>
+
+        </div>
+
+
+        <div class="paso">
+
+            <div class="numero">4</div>
+
+            <h3>Comprueba</h3>
+
+            <p>
+                Descubre qué entendiste
+                y qué necesitas reforzar.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+
+<footer>
+
+    <strong>
+        🎓 Tu Profesor Virtual
+    </strong>
+
+    <p>
+        Una herramienta para aprender,
+        comprender y mejorar.
+    </p>
+
+    <p style="font-size:12px;margin-top:10px;">
+        Proyecto educativo
+    </p>
+
+</footer>
+
+
+
+<script>
+
+
+let modoActual="explicar";
+
+let temaActual="";
+
+let materiaActual="";
+
+let nivelActual="";
+
+
+
+/* MODO OSCURO */
+
+document
+.getElementById("tema")
+.addEventListener("click",function(){
+
+    document.body.classList.toggle("oscuro");
+
+    this.textContent =
+        document.body.classList.contains("oscuro")
+        ? "☀️"
+        : "🌙";
+
+});
+
+
+
+/* CAMBIAR MODO */
+
+document
+.querySelectorAll(".modo-aprendizaje")
+.forEach(function(boton){
+
+    boton.addEventListener("click",function(){
+
+        document
+        .querySelectorAll(".modo-aprendizaje")
+        .forEach(function(b){
+            b.classList.remove("activo");
+        });
+
+        this.classList.add("activo");
+
+        modoActual=this.dataset.modo;
+
+    });
+
+});
+
+
+
+/* COMENZAR */
+
+document
+.getElementById("comenzar")
+.addEventListener("click",function(){
+
+    temaActual =
+        document.getElementById("tema")
+        .value
+        .trim();
+
+    materiaActual =
+        document.getElementById("materia")
+        .value;
+
+    nivelActual =
+        document.getElementById("nivel")
+        .value;
+
+
+    if(!temaActual){
+
+        alert(
+            "Escribe primero el tema que quieres aprender 😊"
+        );
+
+        return;
+    }
+
+
+    document
+    .getElementById("clase")
+    .classList.remove("oculto");
+
+
+    document
+    .getElementById("informacion")
+    .textContent =
+        materiaActual +
+        " • " +
+        nivelActual +
+        " • " +
+        temaActual;
+
+
+    document
+    .getElementById("mensajes")
+    .innerHTML="";
+
+
+    iniciarClase();
+
+
+    document
+    .getElementById("clase")
+    .scrollIntoView({
+        behavior:"smooth"
+    });
+
+});
+
+
+
+/* MENSAJE INICIAL */
+
+function iniciarClase(){
+
+    let texto="";
+
+
+    if(modoActual==="explicar"){
+
+        texto=
+`¡Hola! 👋
+
+Vamos a aprender sobre "${temaActual}".
+
+Primero quiero explicártelo de una manera sencilla.
+
+📌 IDEA PRINCIPAL
+
+${explicacionTema(temaActual)}
+
+Después veremos un ejemplo y te haré una pregunta para comprobar si realmente lo entendiste.
+
+Recuerda: aquí no buscamos copiar una respuesta. Queremos aprender a pensar y resolver. 🧠`;
+
+    }
+
+
+    if(modoActual==="pista"){
+
+        texto=
+`Perfecto 💡
+
+Trabajaremos "${temaActual}" sin darte directamente la respuesta.
+
+Primero dime qué sabes sobre este tema.
+
+Si no sabes nada todavía, no pasa nada: te daré una pequeña pista y avanzaremos paso a paso.`;
+
+    }
+
+
+    if(modoActual==="practicar"){
+
+        texto=
+`¡Vamos a practicar! ✏️
+
+Tema: ${temaActual}
+
+Antes de hacer ejercicios, recuerda esta idea:
+
+${explicacionTema(temaActual)}
+
+Ahora te propondré una actividad para que tú intentes resolverla.`;
+
+    }
+
+
+    if(modoActual==="comprobar"){
+
+        texto=
+`🧠 Vamos a comprobar qué tanto sabes.
+
+Tema: ${temaActual}
+
+No te preocupes si te equivocas. Los errores nos ayudan a descubrir qué debemos reforzar.
+
+Primera pregunta:
+
+¿Qué entiendes tú por "${temaActual}"?`;
+
+    }
+
+
+    agregarMensaje("profesor",texto);
+
+}
+
+
+
+/* EXPLICACIONES */
+
+function explicacionTema(tema){
+
+    let t=tema.toLowerCase();
+
+
+    if(t.includes("newton")){
+
+        return `Las leyes de Newton son tres principios que explican cómo las fuerzas afectan el movimiento de los objetos.
+
+La primera habla de la inercia, la segunda relaciona fuerza, masa y aceleración, y la tercera explica que las fuerzas aparecen en pares de acción y reacción.`;
+
+    }
+
+
+    if(
+        t.includes("fricción") ||
+        t.includes("rozamiento")
+    ){
+
+        return `La fricción es una fuerza que aparece cuando dos superficies están en contacto y se opone al movimiento o al intento de movimiento entre ellas.
+
+Por ejemplo, cuando empujas una caja sobre el piso, la fricción dificulta que la caja se deslice.`;
+
+    }
+
+
+    if(
+        t.includes("fotosíntesis")
+    ){
+
+        return `La fotosíntesis es el proceso mediante el cual las plantas utilizan principalmente la luz solar, agua y dióxido de carbono para producir glucosa y liberar oxígeno.
+
+Es fundamental porque permite que las plantas obtengan materia orgánica y contribuye al oxígeno disponible en el ambiente.`;
+
+    }
+
+
+    if(
+        t.includes("átomo") ||
+        t.includes("atomo")
+    ){
+
+        return `Un átomo es una unidad básica de la materia.
+
+Está formado principalmente por protones y neutrones en el núcleo y electrones alrededor del núcleo.`;
+
+    }
+
+
+    if(
+        t.includes("ecuación") ||
+        t.includes("ecuacion")
+    ){
+
+        return `Una ecuación es una igualdad matemática que contiene una o más cantidades desconocidas.
+
+Resolverla significa encontrar el valor que hace que la igualdad sea verdadera.`;
+
+    }
+
+
+    if(
+        t.includes("porcentaje")
+    ){
+
+        return `Un porcentaje representa una cantidad como una parte de 100.
+
+Por ejemplo, 25% significa 25 de cada 100.`;
+
+    }
+
+
+    if(
+        t.includes("célula") ||
+        t.includes("celula")
+    ){
+
+        return `La célula es la unidad básica de los seres vivos.
+
+Algunas células forman organismos completos y otras se organizan junto con muchas más para formar tejidos y órganos.`;
+
+    }
+
+
+    return `Este tema pertenece a ${materiaActual}.
+
+Vamos a estudiarlo paso a paso.
+
+Primero identifica las palabras principales del tema, después busca cómo se relacionan entre sí y finalmente aplica lo aprendido a un ejemplo.
+
+Si me cuentas qué parte te parece difícil, puedo ayudarte a comprenderla mejor.`;
+
+}
+
+
+
+/* FORMULARIO */
+
+document
+.getElementById("formulario")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+
+    let pregunta =
+        document
+        .getElementById("pregunta")
+        .value
+        .trim();
+
+
+    if(!pregunta)return;
+
+
+    agregarMensaje("usuario",pregunta);
+
+
+    document
+    .getElementById("pregunta")
+    .value="";
+
+
+    setTimeout(function(){
+
+        responder(pregunta);
+
+    },500);
+
+});
+
+
+
+/* RESPUESTAS */
+
+function responder(pregunta){
+
+    let p=pregunta.toLowerCase();
+
+    let respuesta="";
+
+
+    if(
+        p.includes("no entiendo") ||
+        p.includes("explica") ||
+        p.includes("sencillo")
+    ){
+
+        respuesta=
+`Claro 😊
+
+Vamos a hacerlo más sencillo.
+
+Piensa en "${temaActual}" como una idea que podemos dividir en partes pequeñas.
+
+1️⃣ Primero identifica qué significa el concepto.
+
+2️⃣ Después observa qué elementos intervienen.
+
+3️⃣ Finalmente mira cómo se relacionan.
+
+Ahora intenta explicármelo tú con tus propias palabras. No importa si no queda perfecto.`;
+
+    }
+
+
+    else if(
+        p.includes("respuesta") ||
+        p.includes("hazme") ||
+        p.includes("tarea")
+    ){
+
+        respuesta=
+`Puedo ayudarte, pero no quiero que simplemente copies una respuesta. 🧠
+
+Vamos a hacerlo juntos.
+
+Primero dime qué has intentado hacer y te indicaré qué paso puedes revisar.
+
+💡 Pista: busca primero cuál es la información que te da el ejercicio y qué es lo que te están preguntando.`;
+
+    }
+
+
+    else if(
+        p.includes("ejemplo")
+    ){
+
+        respuesta=
+`🌎 Ejemplo:
+
+Imagina que estás aprendiendo "${temaActual}".
+
+En lugar de memorizar una definición, piensa en una situación cotidiana en la que puedas observar ese concepto.
+
+Ahora intenta encontrar tú un ejemplo de "${temaActual}" en la vida diaria.`;
+
+    }
+
+
+    else if(
+        p.includes("sí") ||
+        p.includes("si") ||
+        p.includes("entendí") ||
+        p.includes("entendi")
+    ){
+
+        respuesta=
+`¡Muy bien! 🎉
+
+Ahora comprobemos que realmente lo comprendiste.
+
+Explícame con tus propias palabras qué es "${temaActual}" y dime un ejemplo.
+
+No tienes que utilizar palabras complicadas.`;
+
+    }
+
+
+    else{
+
+        respuesta=
+`Buena pregunta. 👍
+
+Estamos trabajando "${temaActual}".
+
+Para comprenderlo mejor, primero identifica la idea principal.
+
+Después podemos dividir tu pregunta en partes.
+
+💡 Pista:
+
+¿Qué información tienes?
+
+¿Qué necesitas descubrir?
+
+¿Qué concepto de "${temaActual}" podría ayudarte?
+
+Intenta responder esas tres preguntas y seguimos juntos.`;
+
+    }
+
+
+    agregarMensaje("profesor",respuesta);
+
+}
+
+
+
+/* AGREGAR MENSAJES */
+
+function agregarMensaje(tipo,texto){
+
+    let contenedor =
+        document.getElementById("mensajes");
+
+
+    let mensaje =
+        document.createElement("div");
+
+    mensaje.className =
+        "mensaje "+tipo;
+
+
+    let burbuja =
+        document.createElement("div");
+
+    burbuja.className="burbuja";
+
+
+    burbuja.textContent=texto;
+
+
+    mensaje.appendChild(burbuja);
+
+    contenedor.appendChild(mensaje);
+
+
+    contenedor.scrollTop =
+        contenedor.scrollHeight;
+
+}
+
+
+
+/* ACCIONES RAPIDAS */
+
+document
+.querySelectorAll(".acciones button")
+.forEach(function(boton){
+
+    boton.addEventListener("click",function(){
+
+        let accion=this.dataset.accion;
+
+
+        if(accion==="sencillo"){
+
+            document
+            .getElementById("pregunta")
+            .value=
+            "Explícamelo de una manera mucho más sencilla.";
+
+        }
+
+
+        if(accion==="ejemplo"){
+
+            document
+            .getElementById("pregunta")
+            .value=
+            "Dame un ejemplo de la vida cotidiana.";
+
+        }
+
+
+        if(accion==="pregunta"){
+
+            document
+            .getElementById("pregunta")
+            .value=
+            "Hazme una pregunta para comprobar si entendí.";
+
+        }
+
+
+        if(accion==="imagen"){
+
+            buscarImagen(temaActual);
+
+            return;
+
+        }
+
+
+        document
+        .getElementById("formulario")
+        .dispatchEvent(
+            new Event("submit")
+        );
+
+    });
+
+});
+
+
+
+/* BUSCAR IMAGEN EN WIKIMEDIA */
+
+async function buscarImagen(busqueda){
+
+    agregarMensaje(
+        "profesor",
+        "🖼️ Estoy buscando una imagen relacionada con \""+
+        busqueda+"\"..."
+    );
+
+
+    try{
+
+        let url =
+        "https://commons.wikimedia.org/w/api.php"+
+        "?action=query"+
+        "&generator=search"+
+        "&gsrsearch="+
+        encodeURIComponent(busqueda)+
+        "&gsrnamespace=6"+
+        "&gsrlimit=4"+
+        "&prop=imageinfo"+
+        "&iiprop=url"+
+        "&format=json"+
+        "&origin=*";
+
+
+        let respuesta =
+            await fetch(url);
+
+
+        let datos =
+            await respuesta.json();
+
+
+        if(
+            !datos.query ||
+            !datos.query.pages
+        ){
+
+            agregarMensaje(
+                "profesor",
+                "No encontré una imagen adecuada. Podemos continuar con la explicación."
+            );
+
+            return;
+
+        }
+
+
+        let paginas =
+            Object.values(
+                datos.query.pages
+            );
+
+
+        let pagina =
+            paginas.find(function(p){
+
+                return p.imageinfo &&
+                       p.imageinfo[0] &&
+                       p.imageinfo[0].url;
+
+            });
+
+
+        if(!pagina){
+
+            agregarMensaje(
+                "profesor",
+                "No encontré una imagen adecuada para este tema."
+            );
+
+            return;
+
+        }
+
+
+        let imagen =
+            pagina.imageinfo[0].url;
+
+
+        let contenedor =
+            document.createElement("div");
+
+        contenedor.className="imagen-tema";
+
+
+        let img =
+            document.createElement("img");
+
+        img.src=imagen;
+
+        img.alt=
+            "Imagen relacionada con "+busqueda;
+
+
+        let texto =
+            document.createElement("p");
+
+        texto.textContent=
+            "Imagen relacionada con el tema desde Wikimedia Commons.";
+
+
+        contenedor.appendChild(img);
+
+        contenedor.appendChild(texto);
+
+
+        document
+        .getElementById("mensajes")
+        .appendChild(contenedor);
+
+
+    }catch(error){
+
+        agregarMensaje(
+            "profesor",
+            "No pude cargar la imagen en este momento, pero podemos continuar aprendiendo."
+        );
+
+    }
+
+}
+
+
+
+/* NUEVA CLASE */
+
+document
+.getElementById("nueva")
+.addEventListener("click",function(){
+
+    document
+    .getElementById("clase")
+    .classList.add("oculto");
+
+
+    document
+    .getElementById("mensajes")
+    .innerHTML="";
+
+
+    document
+    .getElementById("tema")
+    .value="";
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+});
+
+</script>
+
+</body>
+</html>
